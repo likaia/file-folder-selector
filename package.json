@@ -1,0 +1,78 @@
+{
+  "name": "file-folder-selector",
+  "private": false,
+  "publisher": "magicalprogrammer@qq.com",
+  "version": "0.0.1",
+  "author": "likaia",
+  "license": "MIT",
+  "description": "基于Vue3实现的文件选择插件，支持无限层次的文件夹嵌套",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/likaia/file-folder-selector.git"
+  },
+  "bugs": {
+    "url": "https://github.com/likaia/file-folder-selector/issues"
+  },
+  "homepage": "https://github.com/likaia/file-folder-selector#readme",
+  "keywords": [
+    "file-selector",
+    "file-select",
+    "folder-selector",
+    "folder-select",
+    "file-folder-selector"
+  ],
+  "files": ["dist"],
+  "declaration": true,
+  "main": "./dist/file-folder-selector.umd.js",
+  "module": "./dist/file-folder-selector.js",
+  "exports": {
+    ".": {
+      "import": "./dist/file-folder-selector.js",
+      "require": "./dist/file-folder-selector.umd.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.0.3",
+    "vite": "^3.0.7",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-angular": "^11.0.0",
+    "@types/node": "^18.6.3",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "@vue/compiler-sfc": "^3.0.0-0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "commitizen": "^4.2.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-vue": "^9.0.0",
+    "husky": "^4.3.0",
+    "prettier": "^1.19.1",
+    "sass": "^1.26.5",
+    "typescript": "~4.7.4",
+    "vue-tsc": "^0.38.4"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "volta": {
+    "node": "14.18.0",
+    "yarn": "1.22.17"
+  },
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.0.0",
+    "node": ">= 14.18.0"
+  }
+}
