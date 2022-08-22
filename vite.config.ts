@@ -1,9 +1,10 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
 import vue from "@vitejs/plugin-vue";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), dts()],
   server: {
     host: true,
     port: 8020,
