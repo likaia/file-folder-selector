@@ -2,7 +2,7 @@
   "name": "file-folder-selector",
   "private": false,
   "publisher": "magicalprogrammer@qq.com",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "types": "./dist/main.d.ts",
   "author": "likaia",
   "license": "MIT",
