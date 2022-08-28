@@ -2,7 +2,7 @@
   "name": "file-folder-selector",
   "private": false,
   "publisher": "magicalprogrammer@qq.com",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "types": "./dist/main.d.ts",
   "author": "likaia",
   "license": "MIT",
@@ -32,7 +32,8 @@
     ".": {
       "import": "./dist/file-folder-selector.js",
       "require": "./dist/file-folder-selector.umd.js"
-    }
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite",

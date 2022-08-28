@@ -1,89 +1,101 @@
 <template>
   <div class="main-content">
     <div class="search-panel">
-      <input v-model="searchValue" @change="searchData" placeholder="Search" />
+      <input
+        v-model="searchValue"
+        type="text"
+        @change.stop="searchData(searchValue)"
+        placeholder="搜索文件"
+      />
+      <i class="icon" @click.stop="searchData(searchValue)">
+        <search-icon v-if="!props.defaultSearchImage" />
+        <img v-else :src="props.defaultSearchImage" alt="" />
+      </i>
     </div>
     <div class="folder-list-panel">
-      <div class="top-panel">
-        <div class="path-panel" v-if="folderPath.length > 1">
-          <div
-            class="item-panel"
-            v-for="(item, index) in folderPath"
-            @click.stop="folderBacktracking(item.id, index)"
-            :key="index"
-          >
-            <p>{{ item.folderName }}</p>
-            <div class="icon-panel">
-              <svg
-                width="5"
-                height="7"
-                viewBox="0 0 5 7"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0 1.00195L0 5.51122C0 6.37699 1.02544 6.83368 1.66897 6.25451L4.17412 3.99988C4.6155 3.60264 4.6155 2.91053 4.17412 2.51329L1.66896 0.258653C1.02544 -0.320518 0 0.136176 0 1.00195Z"
-                  fill="#999999"
-                />
-              </svg>
-            </div>
+      <div class="path-panel" v-if="folderPath.length > 1">
+        <div
+          class="item-panel"
+          v-for="(item, index) in folderPath"
+          @click.stop="folderBacktracking(item.id, index)"
+          :title="item.folderName"
+          :key="index"
+        >
+          <p>{{ item.folderName }}</p>
+          <div class="icon-panel">
+            <folder-path-icon v-if="!props.defaultFolderPathImage" />
+            <img :src="props.defaultFolderPathImage" alt="" v-else />
           </div>
         </div>
-        <div class="btn-panel">
-          <div class="select-panel">
-            <input
-              type="checkbox"
-              @change="selectAllBook"
-              v-model="isSelectAll"
-            />
-          </div>
-          <div class="title-panel">全选</div>
+      </div>
+      <div class="btn-panel">
+        <div class="select-panel">
+          <input
+            type="checkbox"
+            @change.stop="selectAllFile(isSelectAll)"
+            v-model="isSelectAll"
+          />
         </div>
+        <div class="title-panel">全选</div>
       </div>
       <div class="list-panel">
         <div
           class="item-panel"
           v-for="(item, index) in curFolderData"
           :key="index"
-          v-show="getTreeNodeTotal(item) > 0"
+          v-show="getTreeNodeTotal(item) > 0 && !item.delStatus"
           @click.stop="selectFile(item)"
           @dblclick.stop="enterTheFolder(item)"
         >
-          <div class="content-panel">
+          <div
+            class="content-panel"
+            :title="item.type === 'folder' ? '双击进入文件夹' : '单击选择文件'"
+          >
             <div class="select-panel">
-              <div class="select-panel">
-                <input
-                  type="checkbox"
-                  @change="selectFile(item, true)"
-                  v-model="item.isSelect"
-                />
-              </div>
+              <input
+                type="checkbox"
+                @change.stop="checkboxChange(item)"
+                v-model="item.isSelect"
+              />
             </div>
             <div class="icon-panel">
-              <svg
-                v-if="item.type === 'folder'"
-                width="32"
-                height="28"
-                viewBox="0 0 32 28"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0 3C0 1.34314 1.34315 0 3 0H11.5406C12.1874 0 12.7943 0.312765 13.1695 0.839526L17.1429 6.41667H0V3Z"
-                  fill="#0088FF"
-                />
-                <path
-                  d="M0 6H29C30.6569 6 32 7.34315 32 9V25.0001C32 26.6569 30.6569 28.0001 29 28.0001H3C1.34315 28.0001 0 26.6569 0 25.0001V6Z"
-                  fill="#B3DDFE"
-                />
-              </svg>
-              <img :src="item.imgSrc" alt="" v-else />
+              <!-- 默认的文件夹图标 -->
+              <folder-icon
+                v-if="item.type === 'folder' && !props.defaultFolderImage"
+              />
+              <img
+                :src="props.defaultFolderImage"
+                alt=""
+                v-if="item.type === 'folder' && props.defaultFolderImage"
+              />
+              <!-- 默认文件图标 -->
+              <file-icon
+                v-if="
+                  item.type === 'file' &&
+                    !item.imgSrc &&
+                    !props.defaultFileImage
+                "
+              />
+              <img
+                :src="props.defaultFileImage"
+                alt=""
+                v-if="
+                  item.type === 'file' && !item.imgSrc && props.defaultFileImage
+                "
+              />
+
+              <!-- 文件图标 -->
+              <img
+                v-if="item.type === 'file' && item.imgSrc"
+                :src="item.imgSrc"
+                alt=""
+              />
             </div>
             <div class="title-panel">{{ item.title }}</div>
           </div>
           <div class="options-panel" v-if="item.type === 'folder'">
             <div class="num-panel">
-              <p>{{ item.selectedTotal }}</p>
+              <p>{{ item.selectedTotal ? item.selectedTotal : 0 }}</p>
               /
               <p>{{ getTreeNodeTotal(item) }}</p>
             </div>
@@ -92,20 +104,24 @@
       </div>
     </div>
     <div class="add-btn-panel">
-      <button @click="addBook">获取已选文件</button>
+      <button @click.stop="addFile">获取已选文件</button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref, shallowRef, ShallowRef } from "vue";
-import { bookcaseDataType, selectedFileType } from "@/type/ComponentType";
-import fileConfig from "@/data/FileConfig.json";
+import { fileDataType, selectedFileType } from "@/type/ComponentType";
 import Queue from "@/lib/Queue";
+import fileConfig from "@/data/FileConfig.json";
+import SearchIcon from "@/icons/search-icon.vue";
+import FolderIcon from "@/icons/folder-icon.vue";
+import FileIcon from "@/icons/file-icon.vue";
+import FolderPathIcon from "@/icons/folder-path-icon.vue";
 
 const searchValue: ShallowRef<string> = shallowRef("");
-let folderTree: bookcaseDataType = JSON.parse(JSON.stringify(fileConfig));
-const curFolderData = ref<Array<bookcaseDataType>>([]);
+let folderTree: fileDataType = JSON.parse(JSON.stringify(fileConfig));
+const curFolderData = ref<Array<fileDataType>>([]);
 const folderPath = ref<Array<{ id: string; folderName: string }>>([
   { id: "root", folderName: "My Files" }
 ]);
@@ -115,11 +131,11 @@ onMounted(() => {
   if (props.fileData) {
     folderTree = JSON.parse(JSON.stringify(props.fileData));
   }
-  curFolderData.value = folderTree.childData as Array<bookcaseDataType>;
+  curFolderData.value = folderTree.childData as Array<fileDataType>;
 });
 
 const props = defineProps<{
-  fileData: {
+  fileData?: {
     title: string;
     id: string;
     delStatus?: boolean;
@@ -127,10 +143,12 @@ const props = defineProps<{
     type: "folder" | "file";
     selectedTotal?: number;
     imgSrc?: string;
-    childData?: Array<bookcaseDataType>;
+    childData?: Array<fileDataType>;
   };
-  defaultFolderImage: string;
-  defaultFileImage: string;
+  defaultFolderImage?: string;
+  defaultFileImage?: string;
+  defaultSearchImage?: string;
+  defaultFolderPathImage?: string;
 }>();
 
 const emit = defineEmits<{
@@ -143,13 +161,20 @@ const emit = defineEmits<{
 const searchData = (value: string) => {
   const result = searchFileOfTree(value);
   if (value.replace(/\s*/g, "") === "") {
-    curFolderData.value = folderTree.childData as Array<bookcaseDataType>;
+    curFolderData.value = folderTree.childData as Array<fileDataType>;
     return;
   }
   curFolderData.value = result;
 };
 
-const selectFile = (item: bookcaseDataType, isCheckbox = false) => {
+const checkboxChange = (item: fileDataType) => {
+  if (item.type === "file") {
+    return;
+  }
+  selectFile(item, true);
+};
+
+const selectFile = (item: fileDataType, isCheckbox = false) => {
   // 重置全选状态
   isSelectAll.value = false;
   // item点击时文件夹不参与单击选中
@@ -192,8 +217,8 @@ const selectFile = (item: bookcaseDataType, isCheckbox = false) => {
 };
 
 // 选中当前节点下的所有文件
-const selectAllBook = (value: string | number | boolean) => {
-  if (folderTree) return;
+const selectAllFile = (value: string | number | boolean) => {
+  if (!folderTree) return;
   const folderID = folderPath.value[folderPath.value.length - 1].id;
   let curLevelData = searchTreeFolderNode(folderTree, folderID);
   // 选中根节点
@@ -232,7 +257,7 @@ const selectAllBook = (value: string | number | boolean) => {
 };
 
 // 进入文件夹
-const enterTheFolder = (item: bookcaseDataType) => {
+const enterTheFolder = (item: fileDataType) => {
   // 重置全选状态
   isSelectAll.value = false;
   if (item.type === "folder" && item.childData) {
@@ -255,11 +280,34 @@ const enterTheFolder = (item: bookcaseDataType) => {
   }
 };
 
-const addBook = () => {
-  const selectedFile = getSelectedBooks(folderTree);
+const addFile = () => {
+  const selectedFile = getSelectedFiles(folderTree);
+  delSelectedNode();
   emit("getSelectedFile", selectedFile);
 };
-const getSelectedBooks = (tree: bookcaseDataType): Array<selectedFileType> => {
+
+// 删除已选文件
+const delSelectedNode = () => {
+  const stack = [folderTree];
+  while (stack.length !== 0) {
+    // 取出栈顶元素
+    const stackTop = stack.pop();
+    if (stackTop) {
+      // 继续搜索子节点
+      if (stackTop.childData && stackTop.childData.length) {
+        stack.push(...[...stackTop.childData].reverse());
+      }
+      if (stackTop.isSelect) {
+        stackTop.delStatus = true;
+      }
+    }
+  }
+  curFolderData.value = [];
+  if (folderTree.childData) {
+    curFolderData.value = folderTree.childData;
+  }
+};
+const getSelectedFiles = (tree: fileDataType): Array<selectedFileType> => {
   const files: Array<selectedFileType> = [];
   const stack = [tree];
   while (stack.length > 0) {
@@ -345,7 +393,7 @@ const folderBacktracking = (folderId: string, pathIndex: number) => {
 };
 
 // 获取节点总数
-const getTreeNodeTotal = (tree: bookcaseDataType) => {
+const getTreeNodeTotal = (tree: fileDataType) => {
   const stack = [tree];
   let total = 0;
   while (stack.length !== 0) {
@@ -366,11 +414,8 @@ const getTreeNodeTotal = (tree: bookcaseDataType) => {
 };
 
 // 更新已选择文件总数
-const updateSelectedFileTotal = (
-  tree: bookcaseDataType,
-  isCheckbox = false
-) => {
-  const queue = new Queue<bookcaseDataType>();
+const updateSelectedFileTotal = (tree: fileDataType, isCheckbox = false) => {
+  const queue = new Queue<fileDataType>();
   queue.enqueue(tree);
   // 使用广度优先搜索获取已选择的文件
   let selectedTotal = 0;
@@ -409,7 +454,7 @@ const updateSelectedFileTotal = (
 };
 
 // 深度优先搜索指定文件
-const searchFileOfTree = (bookTitle: string) => {
+const searchFileOfTree = (fileTitle: string) => {
   const stack = [folderTree];
   const searchResult = [];
   while (stack.length !== 0) {
@@ -420,7 +465,7 @@ const searchFileOfTree = (bookTitle: string) => {
       if (stackTop.childData && stackTop.childData.length) {
         stack.push(...[...stackTop.childData].reverse());
       }
-      if (stackTop.title === bookTitle) {
+      if (stackTop.title.toLowerCase().includes(fileTitle.toLowerCase())) {
         searchResult.push(stackTop);
       }
     }
@@ -430,9 +475,9 @@ const searchFileOfTree = (bookTitle: string) => {
 
 // 深度优先搜索文件树节点
 const searchTreeFolderNode = (
-  tree: bookcaseDataType,
+  tree: fileDataType,
   key: string
-): bookcaseDataType | null | undefined => {
+): fileDataType | null | undefined => {
   const stack = [tree];
   while (stack.length !== 0) {
     // 取出栈顶元素
@@ -461,91 +506,129 @@ const searchTreeFolderNode = (
 .main-content {
   width: 100%;
   height: 100%;
-  background: greenyellow;
+  background: #ffffff;
+  user-select: none;
+  font-size: 14px;
 
   .search-panel {
     width: 100%;
     height: 36px;
-    margin: 15px 20px 10px 20px;
+    margin-bottom: 10px;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    input {
+      width: 100%;
+      height: 36px;
+      border: none;
+      outline: none;
+      background: #eeeeee;
+      border-radius: 8px;
+      box-sizing: border-box;
+      padding-left: 10px;
+      padding-right: 30px;
+    }
+
+    .icon {
+      cursor: pointer;
+      display: inline-block;
+      height: 16px;
+      width: 16px;
+      background-repeat: no-repeat;
+      position: absolute;
+      right: 10px;
+      z-index: 2;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 
   .folder-list-panel {
     width: 100%;
-    height: calc(100% - 210px);
-    margin: 0 20px 10px 20px;
+    height: calc(100% - 92px);
+    margin-bottom: 10px;
 
     // 文件夹
-    .top-panel {
+    .path-panel {
       width: 100%;
+      min-height: 15px;
+      display: flex;
+      align-items: center;
 
-      .path-panel {
-        width: 100%;
-        min-height: 15px;
+      .item-panel {
+        min-width: 50px;
+        height: 15px;
         display: flex;
         align-items: center;
 
-        .item-panel {
-          min-width: 50px;
-          height: 15px;
-          display: flex;
-          align-items: center;
-
-          p {
-            color: #999999;
-            cursor: pointer;
-          }
-
-          .icon-panel {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 7px;
-            height: 5px;
-            margin: 0 8px;
-          }
-
-          &:first-child {
-            p {
-              color: #333333;
-              font-weight: 500;
-            }
-          }
-
-          &:last-child {
-            p {
-              cursor: default;
-            }
-            .icon-panel {
-              display: none;
-            }
-          }
-        }
-      }
-
-      // 全选按钮容器
-      .btn-panel {
-        width: 100%;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        margin: 10px 0;
-        border-bottom: solid 1px #eeeeee;
-
-        .select-panel {
-          width: 16px;
-          height: 16px;
-          margin-left: 7px;
+        p {
+          width: 100%;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-size: 12px;
+          color: #999999;
           cursor: pointer;
+        }
+
+        .icon-panel {
           display: flex;
           justify-content: center;
           align-items: center;
+          width: 7px;
+          height: 5px;
+          margin: 0 8px;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
         }
 
-        .title-panel {
-          min-width: 53px;
-          margin-left: 9px;
+        &:first-child {
+          p {
+            color: #333333;
+            font-weight: 500;
+          }
         }
+
+        &:last-child {
+          p {
+            cursor: default;
+          }
+          .icon-panel {
+            display: none;
+          }
+        }
+      }
+    }
+
+    // 全选按钮容器
+    .btn-panel {
+      width: 100%;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      border-bottom: solid 1px #eeeeee;
+
+      .select-panel {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .title-panel {
+        min-width: 53px;
+        margin-left: 9px;
       }
     }
 
@@ -566,17 +649,51 @@ const searchTreeFolderNode = (
         }
 
         .content-panel {
+          cursor: pointer;
           display: flex;
           align-items: center;
 
           .select-panel {
             width: 16px;
             height: 16px;
-            margin-left: 7px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+
+            .checkbox-panel::before {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              content: "";
+              background: #dbdbdb;
+              border-radius: 4px;
+            }
+
+            .checkbox-panel:checked::before {
+              content: "\2713";
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              border-radius: 4px;
+              font-size: 14px;
+              color: #ffffff;
+              text-align: center;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: #0075ff;
+            }
+
+            .checkbox-panel {
+              appearance: none;
+              cursor: pointer;
+            }
           }
           .icon-panel {
             width: 32px;
@@ -594,7 +711,6 @@ const searchTreeFolderNode = (
           .title-panel {
             min-width: 43px;
             max-width: 98px;
-            max-height: 36px;
             min-height: 15px;
             margin-left: 9px;
             text-align: left;
@@ -608,6 +724,7 @@ const searchTreeFolderNode = (
         .options-panel {
           display: flex;
           align-items: center;
+          margin-right: 7px;
 
           .price-panel {
             min-width: 60px;
@@ -650,13 +767,37 @@ const searchTreeFolderNode = (
   }
 
   .add-btn-panel {
-    width: 100%;
     height: 36px;
-    margin: 0 20px 10px 20px;
+    margin-bottom: 10px;
 
-    .icon-panel {
-      position: absolute;
-      right: 20px;
+    button {
+      width: 100%;
+      height: 100%;
+      background: #0099ff;
+      position: relative;
+      border: none;
+      color: #ffffff;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 1;
+      white-space: nowrap;
+      cursor: pointer;
+      text-align: center;
+      box-sizing: border-box;
+      outline: 0;
+      transition: 0.1s;
+      user-select: none;
+      vertical-align: middle;
+      border-radius: 4px;
+
+      &:hover {
+        background: #0c85ff;
+      }
+
+      &:active {
+        background: #0078ff;
+      }
     }
   }
 }

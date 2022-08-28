@@ -8,207 +8,140 @@
     {
       "title":"帮助手册",
       "id":"1",
-      "price":"$19.99",
-      "isPublic": false,
-      "isSelect": false,
-      "coverImg":"https://www.kaisir.cn/uploads/MarkDownImg/20220810/a6c64ef4a9ab44f98f9b8262bb486b5e.png",
-      "type":"file"
+      "type":"file",
+      "isSelect": false
     },
     {
-      "title":"Tamarao Journal Issue No 32",
+      "title":"帮助手册-1",
       "id":"2",
-      "price":"$99.19",
-      "isPublic": false,
-      "isSelect": false,
-      "coverImg":"",
-      "type":"file"
+      "type":"file",
+      "isSelect": false
     },
     {
-      "title":"dream and chase",
+      "title":"帮助手册-2",
       "id":"3",
-      "price":"$29.99",
-      "isPublic": false,
-      "coverImg":"",
-      "isSelect": false,
-      "type":"file"
+      "type":"file",
+      "isSelect": false
     },
     {
-      "title": "Folder 1",
-      "id": "1001",
-      "type": "folder",
-      "selectedTotal": 0,
+      "title":"帮助手册-3",
+      "id":"4",
+      "type":"file",
+      "isSelect": false
+    },
+    {
+      "title":"帮助手册-4",
+      "id":"5",
+      "type":"file",
+      "isSelect": false
+    },
+    {
+      "title":"新手教程",
+      "id":"6",
+      "type":"folder",
       "isSelect": false,
       "childData": [
         {
-          "title":"手册-1",
-          "id":"1",
-          "price":"$9.99",
-          "isPublic": false,
+          "title":"教程文档-1",
+          "id":"7",
           "isSelect": false,
-          "coverImg":"",
           "type":"file"
         },
         {
-          "title":"手册-2",
-          "id":"1",
-          "price":"$21.99",
-          "isPublic": false,
+          "title":"教程文档-2",
+          "id":"8",
           "isSelect": false,
-          "coverImg":"",
           "type":"file"
         },
         {
-          "title":"手册-3",
-          "id":"1",
-          "price":"$27.99",
-          "isPublic": false,
-          "isSelect": false,
-          "coverImg":"",
-          "type":"file"
+          "title":"教程文档-3",
+          "id":"9",
+          "type":"file",
+          "isSelect": false
         },
         {
-          "title": "Folder 2",
-          "id": "1002",
-          "type": "folder",
-          "selectedTotal": 0,
+          "title":"2022-08-28",
+          "id":"10",
+          "type":"folder",
           "isSelect": false,
           "childData": [
             {
-              "title":"帮助文档-1",
-              "id":"1",
-              "price":"$11.00",
-              "isPublic": false,
-              "isSelect": false,
-              "coverImg":"",
-              "type":"file"
+              "title":"新手-1",
+              "id":"11",
+              "type":"file",
+              "isSelect": false
             },
             {
-              "title":"帮助文档-2",
-              "id":"1",
-              "price":"$41.00",
-              "isPublic": false,
+              "title":"新手-2",
+              "id":"12",
+              "type":"file",
+              "isSelect": false
+            },
+            {
+              "title":"新手-3",
+              "id":"13",
+              "type":"file",
+              "isSelect": false
+            },
+            {
+              "id":"14",
+              "title": "书籍",
+              "type": "folder",
               "isSelect": false,
-              "coverImg":"",
-              "type":"file"
+              "childData": [
+                {
+                  "title":"学习书籍-1",
+                  "id":"15",
+                  "type":"file",
+                  "isSelect": false
+                },
+                {
+                  "title":"学习书籍-2",
+                  "id":"16",
+                  "type":"file",
+                  "isSelect": false
+                }
+              ]
             }
           ]
         }
       ]
     },
     {
-      "title": "Folder 2",
-      "id": "1003",
-      "type": "folder",
+      "title":"进阶教程",
+      "id":"17",
+      "type":"folder",
       "isSelect": false,
-      "selectedTotal": 0,
       "childData": [
         {
-          "title":"绝密档案",
-          "type": "folder",
-          "selectedTotal": 0,
-          "id": "1004",
-          "isSelect": false,
-          "childData": [
-            {
-              "title":"第一期",
-              "type": "folder",
-              "selectedTotal": 0,
-              "id": "1005",
-              "isSelect": false,
-              "childData": [
-                {
-                  "title":"文件-1",
-                  "id":"1",
-                  "price":"$11.00",
-                  "isPublic": true,
-                  "isSelect": false,
-                  "coverImg":"",
-                  "type":"file"
-                },
-                {
-                  "title":"文件-2",
-                  "id":"1",
-                  "price":"$11.00",
-                  "isPublic": true,
-                  "isSelect": false,
-                  "coverImg":"",
-                  "type":"file"
-                }
-              ]
-            },
-            {
-              "title":"第二期",
-              "type": "folder",
-              "selectedTotal": 0,
-              "id": "1006",
-              "isSelect": false,
-              "childData": [
-                {
-                  "title":"文件-1",
-                  "id":"1",
-                  "price":"$11.00",
-                  "isPublic": true,
-                  "isSelect": false,
-                  "coverImg":"",
-                  "type":"file"
-                },
-                {
-                  "title":"文件-2",
-                  "id":"1",
-                  "price":"$11.00",
-                  "isPublic": true,
-                  "isSelect": false,
-                  "coverImg":"",
-                  "type":"file"
-                }
-              ]
-            },
-            {
-              "title":"档案-1",
-              "id":"1",
-              "price":"$11.00",
-              "isPublic": true,
-              "isSelect": false,
-              "coverImg":"",
-              "type":"file"
-            },
-            {
-              "title":"档案-2",
-              "id":"1",
-              "price":"$11.00",
-              "isPublic": false,
-              "isSelect": false,
-              "coverImg":"",
-              "type":"file"
-            },
-            {
-              "title":"档案-3",
-              "id":"1",
-              "price":"$11.00",
-              "isPublic": false,
-              "isSelect": false,
-              "coverImg":"",
-              "type":"file"
-            }
-          ]
+          "title":"文档-1",
+          "id":"18",
+          "type":"file",
+          "isSelect": false
         },
         {
-          "title":"测试文档-1",
-          "id":"1",
-          "price":"$11.00",
-          "isPublic": false,
-          "isSelect": false,
-          "coverImg":"",
-          "type":"file"
+          "title":"文档-2",
+          "id":"19",
+          "type":"file",
+          "isSelect": false
         },
         {
-          "title":"测试文档-2",
-          "id":"1",
-          "price":"$41.00",
-          "isPublic": false,
-          "isSelect": false,
-          "coverImg":"",
-          "type":"file"
+          "title":"文档-3",
+          "id":"20",
+          "type":"file",
+          "isSelect": false
+        },
+        {
+          "title":"文档-4",
+          "id":"21",
+          "type":"file",
+          "isSelect": false
+        },
+        {
+          "title":"文档-5",
+          "id":"22",
+          "type":"file",
+          "isSelect": false
         }
       ]
     }
