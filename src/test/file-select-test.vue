@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts" setup>
-import FileSelect from "@/plugins/components/file-select.vue";
-import { fileDataType } from "@/plugins/type/ComponentType";
+import FileSelect from "@/components/file-select.vue";
+import { fileDataType } from "@/type/ComponentType";
 
 const data: fileDataType = {
   title: "My Files",

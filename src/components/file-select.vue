@@ -12,6 +12,16 @@
         <img v-else :src="props.defaultSearchImage" alt="" />
       </i>
     </div>
+    <div class="btn-panel">
+      <div class="select-panel">
+        <input
+          type="checkbox"
+          @change.stop="selectAllFile(isSelectAll)"
+          v-model="isSelectAll"
+        />
+      </div>
+      <div class="title-panel">全选</div>
+    </div>
     <div class="folder-list-panel">
       <div class="path-panel" v-if="folderPath.length > 1">
         <div
@@ -27,16 +37,6 @@
             <img :src="props.defaultFolderPathImage" alt="" v-else />
           </div>
         </div>
-      </div>
-      <div class="btn-panel">
-        <div class="select-panel">
-          <input
-            type="checkbox"
-            @change.stop="selectAllFile(isSelectAll)"
-            v-model="isSelectAll"
-          />
-        </div>
-        <div class="title-panel">全选</div>
       </div>
       <div class="list-panel">
         <div
@@ -509,6 +509,7 @@ const searchTreeFolderNode = (
   background: #ffffff;
   user-select: none;
   font-size: 14px;
+  overflow: auto;
 
   .search-panel {
     width: 100%;
@@ -548,10 +549,35 @@ const searchTreeFolderNode = (
     }
   }
 
+  // 全选按钮容器
+  .btn-panel {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    border-bottom: solid 1px #eeeeee;
+
+    .select-panel {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .title-panel {
+      min-width: 53px;
+      margin-left: 9px;
+    }
+  }
+
   .folder-list-panel {
     width: 100%;
-    height: calc(100% - 92px);
+    height: calc(100% - 153px);
     margin-bottom: 10px;
+    overflow: auto;
 
     // 文件夹
     .path-panel {
@@ -605,30 +631,6 @@ const searchTreeFolderNode = (
             display: none;
           }
         }
-      }
-    }
-
-    // 全选按钮容器
-    .btn-panel {
-      width: 100%;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      margin: 10px 0;
-      border-bottom: solid 1px #eeeeee;
-
-      .select-panel {
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .title-panel {
-        min-width: 53px;
-        margin-left: 9px;
       }
     }
 
